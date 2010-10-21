@@ -162,6 +162,10 @@ abstract class sfPHPUnitTestCase extends PHPUnit_Framework_TestCase
 
         $this->_reset();
 
+        if (function_exists('gc_collect_cycles')) {
+            gc_collect_cycles();
+        }
+
         if (!empty($e)) {
             throw $e;
         }
@@ -186,9 +190,7 @@ abstract class sfPHPUnitTestCase extends PHPUnit_Framework_TestCase
      */
     protected function clearModelsCache()
     {
-        foreach (Doctrine::getLoadedModels() as $modelName) {
-            Doctrine::getTable($modelName)->clear();
-        }
+        $this->getConnection()->clear();
     }
 
 
